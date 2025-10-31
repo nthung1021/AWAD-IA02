@@ -15,6 +15,7 @@ export default function PhotoDetailPage() {
   useEffect(() => {
     if (!id) return;
 
+    // 1. Try cache
     const cachedRaw = sessionStorage.getItem("picsum_cache");
     if (cachedRaw) {
       try {
@@ -30,7 +31,7 @@ export default function PhotoDetailPage() {
       }
     }
 
-    // Fallback: brute force fetch pages until found or limit reached
+    // 2. Brute fetch
     (async () => {
       let page = 1;
       let found: PicsumPhoto | undefined;
@@ -57,7 +58,10 @@ export default function PhotoDetailPage() {
     return (
       <main className="min-h-screen bg-gray-900 text-white flex flex-col">
         <header className="sticky top-0 z-20 bg-gray-900/80 backdrop-blur border-b border-gray-700 px-4 py-3 flex items-center justify-between">
-          <Link to="/photos" className="text-sm text-gray-300 hover:text-white">
+          <Link
+            to="/photos"
+            className="text-sm text-gray-300 hover:text-white"
+          >
             ← Back
           </Link>
           <h1 className="text-lg font-semibold">Photo Details</h1>
@@ -75,7 +79,10 @@ export default function PhotoDetailPage() {
     return (
       <main className="min-h-screen bg-gray-900 text-white flex flex-col">
         <header className="sticky top-0 z-20 bg-gray-900/80 backdrop-blur border-b border-gray-700 px-4 py-3 flex items-center justify-between">
-          <Link to="/photos" className="text-sm text-gray-300 hover:text-white">
+          <Link
+            to="/photos"
+            className="text-sm text-gray-300 hover:text-white"
+          >
             ← Back
           </Link>
           <h1 className="text-lg font-semibold">Photo Details</h1>
@@ -95,35 +102,41 @@ export default function PhotoDetailPage() {
     );
   }
 
+  // We still request an explicit rendition size instead of original full resolution.
   const fullImage = `https://picsum.photos/id/${photo.id}/1200/800`;
 
   return (
     <main className="min-h-screen bg-gray-900 text-white flex flex-col">
-      <header className="sticky top-0 z-20 bg-gray-900/80 backdrop-blur border-b border-gray-700 px-4 py-3 flex items-center justify-between">
-        <Link to="/photos" className="text-sm text-gray-300 hover:text-white">
+      {/* header */}
+      <header className="sticky top-0 z-20 bg-gray-900/80 backdrop-blur border-b border-gray-700 px-4 py-6 flex items-center justify-between">
+        <Link
+          to="/photos"
+          className="text-sm text-gray-300 hover:text-white"
+        >
           ← Back
         </Link>
-        <h1 className="text-lg font-semibold">Photo Details</h1>
+        <h1 className="text-5xl font-semibold">Photo Details</h1>
         <div className="w-10" />
       </header>
 
-      <section className="flex-1 px-4 py-6 max-w-5xl w-full mx-auto flex flex-col lg:flex-row gap-6">
-        {/* image */}
-        <div className="flex-1 rounded-xl overflow-hidden bg-gray-800 border border-gray-700 shadow-lg">
+      {/* content */}
+      <section className="flex-1 px-4 py-6 w-full mx-auto flex flex-col lg:flex-row gap-6">
+        {/* IMAGE PANEL */}
+        <div className="flex justify-center items-center rounded-xl bg-gray-800 border border-gray-700 shadow-lg p-4 w-full lg:w-auto">
           <img
             src={fullImage}
             alt={photo.title}
-            className="w-full h-full object-contain bg-black"
+            className="w-full h-auto max-w-[900px] object-contain rounded"
           />
         </div>
 
-        {/* meta */}
-        <aside className="w-full lg:w-80 flex-shrink-0 space-y-4">
+        {/* INFO SIDEBAR */}
+        <aside className="w-full lg:w-100 shrink-0 space-y-4 lg:flex-1">
           <div className="rounded-xl bg-gray-800 border border-gray-700 p-4 shadow">
-            <h2 className="text-xl font-semibold text-white break-words">
+            <h2 className="text-xl font-semibold text-white wrap-break-word">
               {photo.title}
             </h2>
-            <p className="text-sm text-gray-400 mt-1 break-words">
+            <p className="text-sm text-gray-400 mt-1 wrap-break-word">
               by {photo.author}
             </p>
           </div>
@@ -132,14 +145,16 @@ export default function PhotoDetailPage() {
             <h3 className="text-sm font-semibold text-gray-300 uppercase tracking-wide">
               Description
             </h3>
-            <p className="text-sm text-gray-400 leading-relaxed mt-1 whitespace-pre-wrap break-words">
+            <p className="text-sm text-gray-400 leading-relaxed mt-1 whitespace-pre-wrap wrap-break-word">
               {photo.description}
             </p>
           </div>
 
           <div className="rounded-xl bg-gray-800 border border-gray-700 p-4 shadow text-xs text-gray-400 space-y-1">
             <div>
-              <span className="font-medium text-gray-300">Original size:</span>{" "}
+              <span className="font-medium text-gray-300">
+                Original size:
+              </span>{" "}
               {photo.width} x {photo.height}
             </div>
             <div className="break-all">
@@ -147,7 +162,9 @@ export default function PhotoDetailPage() {
               {photo.url}
             </div>
             <div className="break-all">
-              <span className="font-medium text-gray-300">Download URL:</span>{" "}
+              <span className="font-medium text-gray-300">
+                Download URL:
+              </span>{" "}
               {photo.download_url}
             </div>
           </div>

@@ -6,7 +6,7 @@ import { useInfinitePhotos } from "../hooks/useInfinitePhotos";
 export default function PhotoListPage() {
   const { photos, hasMore, loading, error, bottomRef } = useInfinitePhotos();
 
-  // push photos to sessionStorage for detail page fast-load
+  // Push photos to sessionStorage for detail page fast-load
   useEffect(() => {
     const event = new CustomEvent("picsum-cache", { detail: { photos } });
     window.dispatchEvent(event);
@@ -15,8 +15,8 @@ export default function PhotoListPage() {
   return (
     <main className="min-h-screen bg-gray-900 text-white flex flex-col">
       {/* header */}
-      <header className="sticky top-0 z-20 bg-gray-900/80 backdrop-blur border-b border-gray-700 px-4 py-3 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">
+      <header className="top-0 z-20 bg-gray-900/80 backdrop-blur border-b border-gray-700 px-4 py-6">
+        <h1 className="text-5xl font-semibold text-center">
           Picsum Gallery
         </h1>
       </header>
