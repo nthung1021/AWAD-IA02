@@ -1,9 +1,16 @@
+import { useEffect } from "react";
 import PhotoCard from "../components/PhotoCard";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { useInfinitePhotos } from "../hooks/useInfinitePhotos";
 
 export default function PhotoListPage() {
   const { photos, hasMore, loading, error, bottomRef } = useInfinitePhotos();
+
+  // push photos to sessionStorage for detail page fast-load
+  useEffect(() => {
+    const event = new CustomEvent("picsum-cache", { detail: { photos } });
+    window.dispatchEvent(event);
+  }, [photos]);
 
   return (
     <main className="min-h-screen bg-gray-900 text-white flex flex-col">
