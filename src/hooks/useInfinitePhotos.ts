@@ -20,7 +20,23 @@ export function useInfinitePhotos() {
         // No more data
         setHasMore(false);
       } else {
-        setPhotos(prev => [...prev, ...newData]);
+        // build a Map to ensure unique IDs
+        setPhotos(prev => {
+          const byId = new Map<string, PicsumPhoto>();
+
+          // keep existing
+          for (const ph of prev) {
+            byId.set(ph.id, ph);
+          }
+
+          // add new (will overwrite same id with latest copy, or skip if you prefer)
+          for (const ph of newData) {
+            byId.set(ph.id, ph);
+          }
+
+          // return array again
+          return Array.from(byId.values());
+        });
         setPage(prev => prev + 1);
       }
     } catch (err: any) {
@@ -58,11 +74,5 @@ export function useInfinitePhotos() {
     };
   }, [loadMore]);
 
-  return {
-    photos,
-    hasMore,
-    loading,
-    error,
-    bottomRef,
-  };
+  return { photos, hasMore, loading, error, bottomRef };
 }
